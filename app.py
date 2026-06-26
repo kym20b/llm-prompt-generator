@@ -38,6 +38,16 @@ def clear_all():
         st.session_state[key] = val
 
 
+def fill_example():
+    st.session_state["role"] = "CS팀 주간 보고 담당자"
+    st.session_state["context"] = "4월 한 달간 고객 상담 데이터를 분석해서 팀장 주간 보고용 요약 자료를 만들어야 합니다. 채널별 현황과 주요 이슈를 파악하는 것이 목표입니다."
+    st.session_state["data_desc"] = "4월 고객 상담 로그 551건 (CSV) — 컬럼: 상담일자, 채널(전화/채팅/이메일), 카테고리(반품/배송/결제/기타), 처리시간(분), 만족도(1~5점)"
+    st.session_state["output_format"] = "채널별 상담 건수 표 + 카테고리별 TOP3 이슈 + 평균 처리시간 비교 + 이번 달 특이사항 2~3가지"
+    st.session_state["priority"] = "반복 민원 패턴 파악이 최우선, 전월 대비 증감 추이 포함"
+    st.session_state["audience"] = "팀장 보고용 — 핵심 수치 위주, 기술적 세부사항 최소화"
+    st.session_state["output_types"] = ["📊 표 (Table)", "📝 마크다운 헤더/섹션"]
+
+
 # ── 자연어 → RCDO + 확장 요소 추출 ──
 def extract_rcdo(description: str) -> dict:
     model = genai.GenerativeModel(
@@ -168,15 +178,7 @@ st.text_area(
 
 col_ex, col_auto = st.columns([1, 3])
 with col_ex:
-    if st.button("📋 예시 채우기", use_container_width=True):
-        st.session_state["role"] = "CS팀 주간 보고 담당자"
-        st.session_state["context"] = "4월 한 달간 고객 상담 데이터를 분석해서 팀장 주간 보고용 요약 자료를 만들어야 합니다. 채널별 현황과 주요 이슈를 파악하는 것이 목표입니다."
-        st.session_state["data_desc"] = "4월 고객 상담 로그 551건 (CSV) — 컬럼: 상담일자, 채널(전화/채팅/이메일), 카테고리(반품/배송/결제/기타), 처리시간(분), 만족도(1~5점)"
-        st.session_state["output_format"] = "채널별 상담 건수 표 + 카테고리별 TOP3 이슈 + 평균 처리시간 비교 + 이번 달 특이사항 2~3가지"
-        st.session_state["priority"] = "반복 민원 패턴 파악이 최우선, 전월 대비 증감 추이 포함"
-        st.session_state["audience"] = "팀장 보고용 — 핵심 수치 위주, 기술적 세부사항 최소화"
-        st.session_state["output_types"] = ["📊 표 (Table)", "📝 마크다운 헤더/섹션"]
-        st.rerun()
+    st.button("📋 예시 채우기", use_container_width=True, on_click=fill_example)
 with col_auto:
     if st.button("⚡ 자동 채우기", use_container_width=True):
         if not st.session_state["natural_input"].strip():
@@ -203,9 +205,7 @@ with col_title:
     st.subheader("📝 분석 정보 입력")
 with col_btn:
     st.write("")
-    if st.button("🔄 초기화", use_container_width=True):
-        clear_all()
-        st.rerun()
+    st.button("🔄 초기화", use_container_width=True, on_click=clear_all)
 
 st.markdown("자동으로 채워진 내용을 직접 수정할 수 있습니다.")
 
