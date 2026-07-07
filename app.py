@@ -51,7 +51,7 @@ def fill_example():
 # ── 자연어 → RCDO + 확장 요소 추출 ──
 def extract_rcdo(description: str) -> dict:
     model = genai.GenerativeModel(
-        model_name="gemini-2.5-flash",
+        model_name="gemini-3.1-flash-lite",
         system_instruction="""사용자가 설명한 데이터 분석 요구사항에서 아래 6가지 요소를 추출해주세요.
 반드시 아래 형식 그대로만 출력하고, 다른 텍스트는 절대 포함하지 마세요.
 
@@ -92,7 +92,7 @@ def generate_prompt_with_explanation(
     priority, audience, output_content, output_types
 ) -> tuple[str, str]:
     model = genai.GenerativeModel(
-        model_name="gemini-2.5-flash",
+        model_name="gemini-3.1-flash-lite",
         system_instruction="""당신은 Claude(Anthropic)에 최적화된 데이터 분석 프롬프트 전문가입니다.
 입력된 모든 정보를 바탕으로 Claude가 최고의 분석 결과를 내도록 설계된 프롬프트를 작성하고,
 왜 그렇게 작성했는지 간단히 설명해주세요.
